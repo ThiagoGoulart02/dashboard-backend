@@ -1,6 +1,6 @@
 package com.example.dashboard.domain.entity;
 
-import com.example.dashboard.web.representation.request.RequestUser;
+import com.example.dashboard.web.representation.request.user.RequestUser;
 import jakarta.persistence.*;
 import lombok.*;
 

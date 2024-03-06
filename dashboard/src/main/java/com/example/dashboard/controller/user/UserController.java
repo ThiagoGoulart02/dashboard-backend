@@ -2,13 +2,15 @@ package com.example.dashboard.controller.user;
 
 import com.example.dashboard.domain.entity.User;
 import com.example.dashboard.repository.UserRepository;
-import com.example.dashboard.web.representation.request.RequestUser;
+import com.example.dashboard.web.representation.request.user.RequestUser;
+import com.example.dashboard.web.representation.request.user.RequestUserDelete;
+import com.example.dashboard.web.representation.request.user.RequestUserUpdate;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -16,22 +18,33 @@ public class UserController {
 
     @Autowired
     private UserRepository repository;
+
     @GetMapping
-    public ResponseEntity getuser(){
-     var user = repository.findAll();
-     return ResponseEntity.ok(user);
+    public ResponseEntity getuser() {
+        var user = repository.findAll();
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping
-    public ResponseEntity registerUser(@RequestBody @Valid RequestUser data){
+    public ResponseEntity registerUser(@RequestBody @Valid RequestUser data) {
         //User newUser = new User(data);
         repository.save(new User(data));
         return ResponseEntity.ok().build();
     }
 
     @PutMapping
-    public ResponseEntity updateUser(@RequestBody @Valid RequestUser data){
-        Optional<User> user = repository.findById(data.id());
-        return ResponseEntity.ok(user);
+    public ResponseEntity updateUser(@RequestBody @Valid RequestUserUpdate data) {
+        var user = repository.findById(UUID.fromString(data.id()));
+        if (user.isPresent()) {
+            user.get().setPassword(data.password());
+            repository.save(user.get());
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity deleteUser(@RequestBody RequestUserDelete data){
+        repository.deleteById(UUID.fromString(data.id()));
+        return ResponseEntity.ok().build();
     }
 }
