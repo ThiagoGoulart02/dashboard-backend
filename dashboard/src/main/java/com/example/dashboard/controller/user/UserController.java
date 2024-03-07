@@ -4,12 +4,15 @@ import com.example.dashboard.domain.entity.User;
 import com.example.dashboard.repository.UserRepository;
 import com.example.dashboard.web.representation.request.user.RequestUser;
 import com.example.dashboard.web.representation.request.user.RequestUserDelete;
+import com.example.dashboard.web.representation.request.user.RequestUserSignIn;
 import com.example.dashboard.web.representation.request.user.RequestUserUpdate;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -27,7 +30,6 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity registerUser(@RequestBody @Valid RequestUser data) {
-        //User newUser = new User(data);
         repository.save(new User(data));
         return ResponseEntity.ok().build();
     }
@@ -46,5 +48,12 @@ public class UserController {
     public ResponseEntity deleteUser(@RequestBody RequestUserDelete data){
         repository.deleteById(UUID.fromString(data.id()));
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/signin")
+    public ResponseEntity searchUser(@RequestBody RequestUserSignIn data){
+        Optional<User> user = repository.findByEmail(data.email());
+        if(user.isPresent() && user.get().getPassword().equals(data.password())) return ResponseEntity.ok().build();
+        else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
