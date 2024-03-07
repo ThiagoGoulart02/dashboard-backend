@@ -2,6 +2,7 @@ package com.example.dashboard.controller.user;
 
 import com.example.dashboard.domain.entity.User;
 import com.example.dashboard.repository.UserRepository;
+import com.example.dashboard.service.UserService;
 import com.example.dashboard.web.representation.request.user.RequestUser;
 import com.example.dashboard.web.representation.request.user.RequestUserDelete;
 import com.example.dashboard.web.representation.request.user.RequestUserSignIn;
@@ -22,6 +23,9 @@ public class UserController {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping
     public ResponseEntity getuser() {
         var user = repository.findAll();
@@ -30,8 +34,8 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity registerUser(@RequestBody @Valid RequestUser data) {
-        repository.save(new User(data));
-        return ResponseEntity.ok().build();
+        User user = userService.create(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @PutMapping
@@ -53,7 +57,7 @@ public class UserController {
     @GetMapping("/signin")
     public ResponseEntity searchUser(@RequestBody RequestUserSignIn data){
         Optional<User> user = repository.findByEmail(data.email());
-        if(user.isPresent() && user.get().getPassword().equals(data.password())) return ResponseEntity.ok().build();
+        if(user.isPresent() && user.get().getPassword().equals(data.password())) return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

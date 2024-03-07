@@ -8,10 +8,8 @@ public record RequestUser(
 
         @NotBlank
         String email,
-
         @NotBlank
         String password,
-
         @NotNull
         String company_name
 ) {
