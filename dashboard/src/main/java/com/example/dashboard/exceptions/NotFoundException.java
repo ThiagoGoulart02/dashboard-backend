@@ -3,13 +3,14 @@ package com.example.dashboard.exceptions;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+import java.net.http.HttpClient;
+
 @Getter
-public class ValidationException extends RuntimeException {
+public class NotFoundException extends RuntimeException {
 
     private HttpStatus status;
-
-    public ValidationException(String message){
+    public NotFoundException(String message){
         super(message);
-        this.status = HttpStatus.BAD_REQUEST;
+        this.status = HttpStatus.NOT_FOUND;
     }
 }

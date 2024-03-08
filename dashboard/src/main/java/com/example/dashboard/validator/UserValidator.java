@@ -15,7 +15,7 @@ public class UserValidator {
             throw new ValidationException("The email is invalid.");
         }
 
-        if(!isPasswordValida(payload.password())){
+        if(!isPasswordValid(payload.password())){
             throw new ValidationException("The password is invalid.");
         }
 
@@ -24,7 +24,7 @@ public class UserValidator {
     public boolean validateEmail(String email){
         return email.contains("@") && email.contains("gmail.com");
     }
-    public boolean isPasswordValida(String password){
+    public boolean isPasswordValid(String password){
         return password.length()>=MIN_PASSWORD_SIZE &&
                 password.chars().anyMatch(Character::isLetter) &&
                 password.chars().anyMatch(Character::isDigit) &&

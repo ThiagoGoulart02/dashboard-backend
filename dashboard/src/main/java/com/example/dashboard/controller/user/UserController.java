@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,43 +22,30 @@ import java.util.UUID;
 public class UserController {
 
     @Autowired
-    private UserRepository repository;
-
-    @Autowired
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity getuser() {
-        var user = repository.findAll();
-        return ResponseEntity.ok(user);
+    public List<User> getuser() {
+        return userService.search();
     }
 
     @PostMapping
     public ResponseEntity registerUser(@RequestBody @Valid RequestUser data) {
-        User user = userService.create(data);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(data));
     }
 
     @PutMapping
     public ResponseEntity updateUser(@RequestBody @Valid RequestUserUpdate data) {
-        var user = repository.findById(UUID.fromString(data.id()));
-        if (user.isPresent()) {
-            user.get().setPassword(data.password());
-            repository.save(user.get());
-        }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.update(data));
     }
 
     @DeleteMapping
     public ResponseEntity deleteUser(@RequestBody RequestUserDelete data){
-        repository.deleteById(UUID.fromString(data.id()));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.FOUND).body(userService.delete(data));
     }
 
     @GetMapping("/signin")
     public ResponseEntity searchUser(@RequestBody RequestUserSignIn data){
-        Optional<User> user = repository.findByEmail(data.email());
-        if(user.isPresent() && user.get().getPassword().equals(data.password())) return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.signIn(data));
     }
 }

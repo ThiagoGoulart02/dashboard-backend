@@ -1,5 +1,6 @@
 package com.example.dashboard.web.error;
 
+import com.example.dashboard.exceptions.NotFoundException;
 import com.example.dashboard.exceptions.RestException;
 import com.example.dashboard.exceptions.ValidationException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }
 
-
-
+    @ExceptionHandler(NotFoundException.class)
+    private ResponseEntity<RestException> userFindValidation(NotFoundException exception){
+        RestException threatResponse = new RestException(exception.getStatus(), exception.getMessage());
+        return ResponseEntity.status(threatResponse.getStatus()).body(threatResponse);
+    }
 }
