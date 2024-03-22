@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/user")
 public class UserController {
 
@@ -29,7 +30,7 @@ public class UserController {
         return userService.search();
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity registerUser(@RequestBody @Valid RequestUser data) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(data));
     }
@@ -44,7 +45,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.FOUND).body(userService.delete(data));
     }
 
-    @GetMapping("/signin")
+    @PostMapping("/signin")
     public ResponseEntity searchUser(@RequestBody RequestUserSignIn data){
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.signIn(data));
     }
