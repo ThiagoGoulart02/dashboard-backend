@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 public record RequestUserUpdate(
 
         @NotNull
-        String id,
+        String id_user,
         @NotBlank
         String password
 ) {

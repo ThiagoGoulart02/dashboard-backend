@@ -12,11 +12,11 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id_user")
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID id_user;
     private String email;
     private String password;
     private String company_name;

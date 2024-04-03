@@ -6,6 +6,6 @@ import jakarta.validation.constraints.NotNull;
 public record RequestUserDelete(
         @NotNull
         @NotBlank
-        String id
+        String id_user
         ) {
 }
