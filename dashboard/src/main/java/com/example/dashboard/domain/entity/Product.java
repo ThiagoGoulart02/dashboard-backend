@@ -18,14 +18,15 @@ public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id_product;
-    private UUID id_user;
+    @Column(name = "id_user")
+    private UUID userId;
     private String title;
     private int amount;
     private double price;
     private String description;
 
     public Product(RequestProduct requestProduct){
-        this.id_user = requestProduct.id_user();
+        this.userId = requestProduct.id_user();
         this.title = requestProduct.title();
         this.amount = requestProduct.amount();
         this.price = requestProduct.price();

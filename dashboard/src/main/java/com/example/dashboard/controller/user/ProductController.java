@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/user")
+@RequestMapping("/products")
 public class ProductController {
 
     @Autowired
@@ -27,12 +27,12 @@ public class ProductController {
         return productService.search();
     }
 
-    @GetMapping("products/{id}")
+    @GetMapping("/by-user/{id}")
     public ResponseEntity<List<ProductsResponse>> searchByUser(@PathVariable UUID id) {
         return productService.searchByUser(id);
     }
 
-    @GetMapping("product/{id}")
+    @GetMapping("/by-id/{id}")
     public Optional<Product> searchById(@PathVariable UUID id) {
         return productService.searchById(id);
     }
@@ -40,5 +40,15 @@ public class ProductController {
     @PostMapping("/create")
     public ResponseEntity createProduct(@RequestBody @Valid RequestProduct data) {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.create(data));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public List<Product> deleteProduct(@PathVariable UUID id){
+        return productService.deleteProduct(id);
+    }
+
+    @PutMapping("/update/{id}")
+    public List<Product> updateProduct(@PathVariable UUID id, @RequestBody Product product){
+        return null;
     }
 }
