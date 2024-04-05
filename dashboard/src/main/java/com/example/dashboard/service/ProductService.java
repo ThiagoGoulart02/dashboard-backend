@@ -2,6 +2,8 @@ package com.example.dashboard.service;
 
 import com.example.dashboard.domain.entity.Product;
 import com.example.dashboard.domain.entity.User;
+import com.example.dashboard.exceptions.LengthException;
+import com.example.dashboard.exceptions.ValidationException;
 import com.example.dashboard.mapper.ProductMapper;
 import com.example.dashboard.repository.ProductRepository;
 import com.example.dashboard.repository.UserRepository;
@@ -27,10 +29,10 @@ public class ProductService {
 
 
     public Product create(RequestProduct requestProduct) {
-        if(requestProduct.title().length()>160) return null;
-        if(requestProduct.amount()<0) return null;
-        if(requestProduct.price()<0) return null;
-        if(requestProduct.description().length()>360) return null;
+        if(requestProduct.title().length()>160) throw new LengthException("Invalid title. The title must be less then 160.");
+        if(requestProduct.amount()<0) throw new ValidationException("Invalid amount. The amount must be positive.");
+        if(requestProduct.price()<0) throw new ValidationException("Invalid price. The price must be positive.");
+        if(requestProduct.description().length()>360) throw new LengthException("Invalid description. Description must be less than 360 characters.");
         return repository.save(new Product((requestProduct)));
     }
 

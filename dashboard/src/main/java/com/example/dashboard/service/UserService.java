@@ -27,9 +27,8 @@ public class UserService {
 
     public User create(RequestUser user) {
         Optional<User> verifyUser = repository.findByEmail(user.email());
+
         if (verifyUser.isPresent()) throw new ValidationException("This user email exists.");
-
-
 
         validator.validatePayload(user);
 
