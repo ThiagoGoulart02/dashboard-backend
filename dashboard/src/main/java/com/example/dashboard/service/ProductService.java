@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -30,10 +27,11 @@ public class ProductService {
 
 
     public Product create(RequestProduct requestProduct) {
-
-        Product newProduct = new Product((requestProduct));
-        repository.save(newProduct);
-        return newProduct;
+        if(requestProduct.title().length()>160) return null;
+        if(requestProduct.amount()<0) return null;
+        if(requestProduct.price()<0) return null;
+        if(requestProduct.description().length()>360) return null;
+        return repository.save(new Product((requestProduct)));
     }
 
     public List<Product> search() {
@@ -45,21 +43,28 @@ public class ProductService {
     }
 
     public ResponseEntity<List<ProductsResponse>> searchByUser(UUID id) {
-        Optional<User> userOptional = userRepository.findById(id);
-
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            List<Product> products = repository.findByUserId(id);
-            ProductsResponse response = productMapper.toResponse(user, products);
-            List<ProductsResponse> responseList = new ArrayList<>();
-            responseList.add(response);
-            return ResponseEntity.ok(responseList);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return userRepository.findById(id)
+                .map(user -> {
+                    List<Product> products = repository.findByUserId(id);
+                    ProductsResponse response = productMapper.toResponse(user, products);
+                    return ResponseEntity.ok(Collections.singletonList(response));
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    public List<Product> deleteProduct(UUID id){
+    public Product updateProduct(UUID id, Product product) {
+        return repository.findById(id)
+                .map(existingProduct -> {
+                    existingProduct.setTitle(product.getTitle());
+                    existingProduct.setAmount(product.getAmount());
+                    existingProduct.setPrice(product.getPrice());
+                    existingProduct.setDescription(product.getDescription());
+                    return repository.save(existingProduct);
+                })
+                .orElse(null);
+    }
+
+    public List<Product> deleteProduct(UUID id) {
         repository.deleteById(id);
         return repository.findAll();
     }

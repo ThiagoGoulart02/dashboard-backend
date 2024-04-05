@@ -48,7 +48,7 @@ public class ProductController {
     }
 
     @PutMapping("/update/{id}")
-    public List<Product> updateProduct(@PathVariable UUID id, @RequestBody Product product){
-        return null;
+    public Product updateProduct(@PathVariable UUID id, @RequestBody Product product){
+        return productService.updateProduct(id, product);
     }
 }
