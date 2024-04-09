@@ -18,6 +18,8 @@ public class UserValidator {
         if(!isPasswordValid(payload.password())){
             throw new ValidationException("The password is invalid.");
         }
+
+        if(payload.company_name().isEmpty()) throw new ValidationException("The company name cannot be empty");
     }
 
     public boolean validateEmail(String email){

@@ -26,17 +26,11 @@ public class UserService {
     private UserValidator validator;
 
     public User create(RequestUser user) {
-        Optional<User> verifyUser = repository.findByEmail(user.email());
-
-        if (verifyUser.isPresent()) throw new ValidationException("This user email exists.");
+        if(repository.findByEmail(user.email()).isPresent()) throw new ValidationException("This user email exists.");
 
         validator.validatePayload(user);
 
-        User newUser = new User(user);
-
-        repository.save(newUser);
-
-        return newUser;
+        return repository.save(new User(user));
     }
 
     public List<User> search() {
