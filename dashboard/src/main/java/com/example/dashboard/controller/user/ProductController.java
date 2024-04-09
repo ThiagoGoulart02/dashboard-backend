@@ -33,7 +33,7 @@ public class ProductController {
     }
 
     @GetMapping("/by-id/{id}")
-    public Optional<Product> searchById(@PathVariable UUID id) {
+    public ResponseEntity<Product> searchById(@PathVariable UUID id) {
         return productService.searchById(id);
     }
 
