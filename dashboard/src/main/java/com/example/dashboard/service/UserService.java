@@ -27,9 +27,8 @@ public class UserService {
 
     public User create(RequestUser user) {
         Optional<User> verifyUser = repository.findByEmail(user.email());
+
         if (verifyUser.isPresent()) throw new ValidationException("This user email exists.");
-
-
 
         validator.validatePayload(user);
 
@@ -45,7 +44,7 @@ public class UserService {
     }
 
     public User update(RequestUserUpdate data) {
-        var user = repository.findById(UUID.fromString(data.id()));
+        var user = repository.findById(UUID.fromString(data.id_user()));
         if (user.isPresent()) {
             user.get().setPassword(data.password());
             if (validator.isPasswordValid(data.password())) return repository.save(user.get());
@@ -55,11 +54,11 @@ public class UserService {
     }
 
     public List<User> delete(RequestUserDelete data){
-        var user = repository.findById(UUID.fromString(data.id()));
+        var user = repository.findById(UUID.fromString(data.id_user()));
         if(user.isEmpty()){
             throw new NotFoundException("User not found.");
         }
-        repository.deleteById(UUID.fromString(data.id()));
+        repository.deleteById(UUID.fromString(data.id_user()));
         return repository.findAll();
     }
 
