@@ -35,14 +35,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(data));
     }
 
-    @PutMapping
-    public ResponseEntity updateUser(@RequestBody @Valid RequestUserUpdate data) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.update(data));
+    @PutMapping("/update/{id}")
+    public ResponseEntity updateUser(@PathVariable UUID id, @RequestBody @Valid RequestUserUpdate requestUserUpdate) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.update(id, requestUserUpdate.password()));
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteUser(@RequestBody RequestUserDelete data) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(userService.delete(data));
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity deleteUser(@PathVariable UUID id) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(userService.delete(id));
     }
 
     @PostMapping("/signin")
