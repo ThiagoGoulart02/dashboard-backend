@@ -18,7 +18,6 @@ public class UserValidator {
         if(!isPasswordValid(payload.password())){
             throw new ValidationException("The password is invalid.");
         }
-
     }
 
     public boolean validateEmail(String email){

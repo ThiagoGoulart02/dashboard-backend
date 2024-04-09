@@ -1,4 +1,4 @@
-package com.example.dashboard.controller.user;
+package com.example.dashboard.controller.product;
 
 import com.example.dashboard.domain.entity.Product;
 import com.example.dashboard.service.ProductService;
