@@ -41,12 +41,12 @@ public class UserController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteUser(@RequestBody RequestUserDelete data){
+    public ResponseEntity deleteUser(@RequestBody RequestUserDelete data) {
         return ResponseEntity.status(HttpStatus.FOUND).body(userService.delete(data));
     }
 
     @PostMapping("/signin")
-    public ResponseEntity searchUser(@RequestBody RequestUserSignIn data){
+    public ResponseEntity searchUser(@RequestBody RequestUserSignIn data) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.signIn(data));
     }
 }

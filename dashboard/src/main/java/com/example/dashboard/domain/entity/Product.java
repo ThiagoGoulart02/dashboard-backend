@@ -16,7 +16,8 @@ import java.util.UUID;
 @EqualsAndHashCode(of = "id_product")
 public class Product {
 
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id_product;
     @Column(name = "id_user")
     private UUID userId;
@@ -25,7 +26,7 @@ public class Product {
     private double price;
     private String description;
 
-    public Product(RequestProduct requestProduct){
+    public Product(RequestProduct requestProduct) {
         this.userId = requestProduct.id_user();
         this.title = requestProduct.title();
         this.amount = requestProduct.amount();
